@@ -3,22 +3,75 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
-
+    
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
-
+    
     {% assets "home_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
     {% block header %}{% endblock %}
-    <title>{% block title %}{% endblock %}NEXTAGRAM</title>
+    <title>{% block title %}{% endblock %}| NEXTAGRAM</title>
   </head>
   <body>
-    {% block content %}
-    {% endblock %}
+    <nav class="navbar fixed-top shadow-sm p-1 px-5 mb-5 navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">  
+        <img src="../static/css/nextagramlogo.png" width="35" height="35" class="d-inline-block align-top pr-1" alt="Nextagram" />Nextagram
+      </a>
+      <div class="nav collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
+        <form class="form-inline my-1 mr-5 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav mt-2 mt-lg-0">
+          {% if current_user.is_authenticated %}
+          <li class="nav-item active">
+            <label class="nav-link text-capitalize mr-2" for="username">Welcome, {{current_user.username}}</label>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="../static/css/profileicon.png" width="30" height="30" class="d-inline-block align-top pr-1" alt="profile" />
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{url_for('show_profile',username=current_user.username)}}">My Profile</a>
+              <a class="dropdown-item" href="{{url_for('edit_page',id=current_user.id)}}">Edit Account</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Nothing</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('user')}}">Sign In</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('new_user')}}">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-5 pt-3">
+      {% if error %}
+        <p class="error alert alert-danger" role="alert"><strong>Error:</strong> {{ error }}
+      {% endif %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashes alert alert-primary" role="alert" style="list-style: none">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+      {% endblock %}
+    </div>  
   </body>
 </html>

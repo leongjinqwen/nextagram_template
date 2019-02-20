@@ -1,0 +1,12 @@
+{% extends "_layout.html" %}
+{% block title %}500{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1>Internal Server Error</h1>
+    <p class="text-secondary" style="font-size:25px">The server encountered an internal error or misconfiguration and was unable to complete your request. Please try again later.</p>
+    <img width="400px" src="../static/sorry.gif" />
+    <div>
+        <a href="{{ url_for('index') }}">Back to Homepage</a>
+    </div>
+</div>
+{% endblock %}

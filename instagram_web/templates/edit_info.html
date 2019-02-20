@@ -1,0 +1,30 @@
+{% extends "_layout.html" %}
+{% block title %}
+  Edit
+{% endblock %}
+{% block content %}
+<h1>Edit {{current_user.username}}'s Profile</h1>
+
+<form action="{{url_for('edit_info',id=current_user.id)}}" method="POST"> 
+    {% for error in errors if errors|length > 0 %}
+    <ul class="flashes alert alert-danger" role="alert" style="list-style: none">  
+        <li>{{error}}</li>
+    </ul>
+    {% endfor %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
+    <div class="form-group">
+        <label for="name">Username:</label>
+        <input type='text' required name='username' value="{{current_user.username}}" class="form-control" / >
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type='email' required name='email' value="{{current_user.email}}" class="form-control" / >
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type='password' required name='password' class="form-control" / >
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Edit</button>
+</form>
+{% endblock %}
