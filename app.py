@@ -16,9 +16,6 @@ web_dir = os.path.join(os.path.dirname(
 
 app = Flask('NEXTAGRAM', root_path=web_dir)
 csrf = CSRFProtect(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-# login_manager.login_view = "user"
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")
@@ -37,83 +34,6 @@ def after_request(response):
 @app.route('/')
 def index():
     return render_template('home.html')
-
-@app.route("/new_user")
-def new_user():
-    return render_template('signup.html')
-
-@app.route("/sign_up",methods=["POST"])
-def sign_up():
-    user_password = request.form['password']
-    user = User(username=request.form['username'],email=request.form['email'].lower(),password=user_password)
-    if user.save():
-        login_user(user)
-        flash("Successfully signed up and logged in.")
-        return redirect(url_for('index'))
-    else:
-        return render_template('signup.html',username=request.form['username'], errors=user.errors)
-
-@app.route("/users")
-def user():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    else:
-        return render_template('login.html')
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.get_by_id(int(user_id))
-
-@app.route("/login",methods=["GET","POST"])
-def login():
-    user = User.get_or_none(User.username == request.form['username'])
-    if user :
-        password_to_check = request.form['password']
-        hashed_password = user.password
-        result = check_password_hash(hashed_password, password_to_check)
-        if result :
-            login_user(user)
-            flash("Successfully logged in.")
-            return redirect(url_for('index'))
-        else:
-            error = "Please fill in valid username and password."
-            return render_template('login.html',error=error)
-    
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    flash("Successfully logged out.")
-    return redirect(url_for('index'))
-
-@app.route('/users/<username>')
-def show_profile(username):
-    user = User.get(User.username == username)
-    return render_template('profile.html',user=user)
-    
-@app.route('/users/<int:id>/edit')
-def edit_page(id):
-    try:
-        if current_user.id==id or current_user.role =='admin':
-            user= User.get_by_id(id)
-            return render_template('edit_info.html',user=user)
-        return render_template('401.html'), 401    
-    except:
-        return render_template('401.html'), 401    
-
-@app.route('/users/<int:id>/editing',methods=["POST"])
-def edit_info(id):
-    if current_user.id==id or current_user.role =='admin':
-        user_password = request.form['password']
-        user = User.get(User.id == id)
-        user.username = request.form['username']
-        user.email=request.form['email']
-        user.password=user_password
-        if user.save():
-            flash("Successfully saved.")
-            return redirect(url_for('edit_page',id=id))
-        return render_template('edit_info.html',errors=user.errors)
-    return render_template('401.html'), 401 
 
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
     try:

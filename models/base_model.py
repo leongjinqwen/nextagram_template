@@ -16,7 +16,7 @@ class BaseModel(pw.Model):
             return super(BaseModel, self).save(*args, **kwargs)
         else:
             return 0
-            
+         
     class Meta:
         database = db
         legacy_table_names = False

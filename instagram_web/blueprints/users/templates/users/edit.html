@@ -6,8 +6,8 @@
 {% if current_user.role == 'admin' %}
 <h5 class="text-center text-muted">Admin access only</h5>
 {% endif %}
-<h1>Edit {{user.username}}'s Profile</h1>
-<form action="{{url_for('edit_info',id=user.id)}}" method="POST"> 
+<h1>Update {{user.username}}'s Profile</h1>
+<form action="{{url_for('users.update',id=user.id)}}" method="POST"> 
     {% for error in errors if errors|length > 0 %}
     <ul class="flashes alert alert-danger" role="alert" style="list-style: none">  
         <li>{{error}}</li>

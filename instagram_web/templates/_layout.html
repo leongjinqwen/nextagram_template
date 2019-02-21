@@ -37,21 +37,21 @@
               <img src="/static/images/profileicon.png" width="30" height="30" class="d-inline-block align-top pr-1" alt="profile" />
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{url_for('show_profile',username=current_user.username)}}">My Profile</a>
-              <a class="dropdown-item" href="{{url_for('edit_page',id=current_user.id)}}">Edit Account</a>
+              <a class="dropdown-item" href="{{url_for('users.show',username=current_user.username)}}">My Profile</a>
+              <a class="dropdown-item" href="{{url_for('users.edit',id=current_user.id)}}">Edit Account</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Nothing</a>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+            <a class="nav-link" href="{{url_for('sessions.logout')}}">Logout</a>
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('user')}}">Sign In</a>
+            <a class="nav-link" href="{{url_for('sessions.new')}}">Sign In</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{url_for('new_user')}}">Sign Up</a>
+            <a class="nav-link" href="{{url_for('users.new')}}">Sign Up</a>
           </li>
           {% endif %}
         </ul>
