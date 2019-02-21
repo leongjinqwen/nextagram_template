@@ -17,6 +17,11 @@ class BaseModel(pw.Model):
         else:
             return 0
          
+    def validate(self):
+        print(
+            f"Warning validation method not implemented for {str(type(self))}")
+        return True
+
     class Meta:
         database = db
         legacy_table_names = False

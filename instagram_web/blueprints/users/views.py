@@ -38,7 +38,7 @@ def index():
 def edit(id):
     try:
         if current_user.id==id or current_user.role =='admin':
-            user= User.get_by_id(id)
+            user= User.get(User.id==id)
             return render_template('edit.html',user=user)
         return render_template('401.html'), 401    
     except:
@@ -47,13 +47,15 @@ def edit(id):
 @users_blueprint.route('/<int:id>', methods=['POST'])
 def update(id):
     if current_user.id==id or current_user.role =='admin':
-        user_password = request.form['password']
         user = User.get(User.id == id)
+        user_password = request.form['password']
         user.username = request.form['username']
-        user.email=request.form['email']
-        user.password=user_password
+        user.email = request.form['email']
+        user.password = user_password
         if user.save():
-            flash("Successfully saved.")
+            flash("Successfully updated.")
             return redirect(url_for('users.edit',id=id))
-        return render_template('edit.html',errors=user.errors)
+        else:
+            return render_template('edit.html',errors=user.errors)
+            # errors=user.errors return user undefined error
     return render_template('401.html'), 401 

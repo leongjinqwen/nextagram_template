@@ -11,7 +11,7 @@ sessions_blueprint = Blueprint('sessions',
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "user"
+login_manager.login_view = "new"
 
 @sessions_blueprint.route("/new", methods=['GET'])
 def new():
@@ -37,7 +37,7 @@ def login():
             return redirect(url_for('index'))
         else:
             error = "Please fill in valid username and password."
-            return render_template('new.html',error=error)
+            return render_template('login.html',error=error)
     
 @sessions_blueprint.route('/logout')
 @login_required

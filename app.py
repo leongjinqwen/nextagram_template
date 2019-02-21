@@ -6,10 +6,6 @@ from models.user import User
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_wtf.csrf import CSRFProtect
 from flask_login import UserMixin,LoginManager,login_required,logout_user,login_user,current_user
-from helpers import *
-from werkzeug.utils import secure_filename
-
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'instagram_web')
@@ -34,42 +30,6 @@ def after_request(response):
 @app.route('/')
 def index():
     return render_template('home.html')
-
-def upload_file_to_s3(file, bucket_name, acl="public-read"):
-    try:
-        s3.upload_fileobj(
-            file,
-            bucket_name,
-            file.filename,
-            ExtraArgs={
-                "ACL": acl,
-                "ContentType": file.content_type
-            }
-        )
-    except Exception as e:
-        flash("Something Happened: ", e)
-        return e
-    return "{}{}".format(app.config["S3_LOCATION"], file.filename)
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/users/upload',methods=["POST"])
-def profile_photo():
-    if "user_file" not in request.files:
-        return "No user_file key in request.files"
-    file = request.files["user_file"]
-    if file.filename == "":
-        return "Please select a file"
-    if file and allowed_file(file.filename):
-        file.filename = secure_filename(file.filename)
-        output = upload_file_to_s3(file, app.config["S3_BUCKET"])
-        return str(output)
-    else:
-        return render_template('edit_info.html')
-
-
 
 @app.errorhandler(401)
 def unauthorized(e):
