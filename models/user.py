@@ -7,6 +7,7 @@ class User(UserMixin,BaseModel):
     username = pw.CharField(unique=True,null=False)
     email = pw.CharField(unique=True,null=False)
     password = pw.CharField(null=False)
+    role = pw.CharField(null=False,default='user')
 
     def validate(self):
         duplicate_username = User.get_or_none(User.username == self.username)
@@ -19,3 +20,5 @@ class User(UserMixin,BaseModel):
             self.errors.append('Password must between 8-25 characters.')
         else:
             self.password=generate_password_hash(self.password)
+
+   
