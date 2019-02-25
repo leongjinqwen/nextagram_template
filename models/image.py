@@ -7,12 +7,13 @@ from app import app
 
 
 class Image(BaseModel):
+    name = pw.CharField()
     image_path = pw.TextField(unique=True,null=False)
-    user_id = pw.ForeignKeyField(User, backref='users')
+    user = pw.ForeignKeyField(User, backref='images')
+    gallery = pw.BooleanField(default=True)
 
-    
     @hybrid_property
-    def profile_image_url(self):
+    def image_url(self):
         return app.config['AWS_S3_DOMAIN'] + self.image_path
     
 

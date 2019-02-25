@@ -13,6 +13,7 @@ class Config(object):
     S3_LOCATION = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
     AWS_S3_DOMAIN = os.environ.get("S3_DOMAIN")
 
+
 class ProductionConfig(Config):
     DEBUG = False
     ASSETS_DEBUG = False

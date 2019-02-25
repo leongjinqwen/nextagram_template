@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
-    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
-    
+    <link rel="shortcut icon" href="/static/images/nextagramlogo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
@@ -15,63 +15,79 @@
     {% endassets %}
 
     {% block header %}{% endblock %}
+    <style>
+      body {
+        font-family: 'Raleway', sans-serif;
+        background:#f5f5f5;
+      }
+      
+    </style>
+    {% block css %}{% endblock %}
     <title>{% block title %}{% endblock %}| NEXTAGRAM</title>
   </head>
   <body>
-    <nav class="navbar fixed-top shadow-sm p-1 px-5 mb-5 navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/">  
-        <img src="/static/images/nextagramlogo.png" width="35" height="35" class="d-inline-block align-top pr-1" alt="Nextagram" />Nextagram
-      </a>
-      <div class="nav collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
-        <form class="form-inline my-1 mr-5 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        <ul class="navbar-nav mt-2 mt-lg-0">
-          {% if current_user.is_authenticated %}
-          <li class="nav-item active">
-            <label class="nav-link text-capitalize mr-2" for="username">Welcome, {{current_user.username}}</label>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="/static/images/profileicon.png" width="30" height="30" class="d-inline-block align-top pr-1" alt="profile" />
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{url_for('users.show',username=current_user.username)}}">My Profile</a>
-              <a class="dropdown-item" href="{{url_for('users.edit',id=current_user.id)}}">Edit Account</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Nothing</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('sessions.logout')}}">Logout</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('sessions.new')}}">Sign In</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('users.new')}}">Sign Up</a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
-    </nav>
-    <div class="container mt-5 pt-3">
-      {% if error %}
-        <p class="error alert alert-danger" role="alert"><strong>Error:</strong> {{ error }}
-      {% endif %}
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <ul class="flashes alert alert-primary" role="alert" style="list-style: none">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
+    <div class="container-fluid">
+      <nav class="navbar fixed-top shadow-sm p-1 px-5 mb-5 navbar-expand-lg navbar-light bg-light justify-content-between ">
+        <a class="navbar-brand" href="/">  
+          <img src="/static/images/nextagramlogo.png" width="35" height="33" class="d-inline-block align-top" alt="Nextagram" />Nextagram
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="container">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto">
+            <form action="{{url_for('users.search')}}" method="POST" class="form-inline my-2 my-lg-0">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
+              <input class="form-control mr-sm-2" type="search" placeholder="Type username" name='search'>
+              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form>
           </ul>
-        {% endif %}
-      {% endwith %}
-      {% block content %}
-      {% endblock %}
+          <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
+              <label class="nav-link mt-1 mr-2" for="username">Welcome, {{current_user.username}}</label>
+              <a class="nav-link" href="{{url_for('images.new',id=current_user.id)}}">
+                <img src="/static/images/photo.png" width="33" height="26" class="d-inline-block mt-1" alt="photo" />
+              </a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img src="{{current_user.profile_image_url}}" width="38" height="38" class="border rounded-circle d-inline-block align-top" alt="profile" />
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{url_for('users.show',username=current_user.username)}}">My Profile</a>
+                  <a class="dropdown-item" href="{{url_for('users.edit',id=current_user.id)}}">
+                    <img src="/static/images/setting.png" width="25" height="23" class="d-inline-block" alt="setting"/>Setting
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Nothing</a>
+                </div>
+              </li>
+              <a class="nav-link mt-1" href="{{url_for('sessions.logout')}}">Logout</a>
+            {% else %}
+              <a class="nav-link mt-1" href="{{url_for('sessions.new')}}">Sign In</a>
+              <a class="nav-link mt-1" href="{{url_for('users.new')}}">Sign Up</a>
+            {% endif %}
+          </ul>
+        </div>
+        </div>  
+      </nav>
+      <div class="mt-5 pt-3">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+            <ul class="flashes mt-1" style="list-style: none">
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}}" role="alert" >
+              <li>{{ message }}</li>
+            </div>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <div class="container mt-2 p-2">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
     </div>  
   </body>
 </html>

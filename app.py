@@ -2,11 +2,26 @@ import os
 import config
 from flask import Flask,render_template,request,url_for,redirect,flash,escape
 from models.base_model import db
-from models.user import User
-from werkzeug.security import generate_password_hash,check_password_hash
 from flask_wtf.csrf import CSRFProtect
-from flask_login import UserMixin,LoginManager,login_required,logout_user,login_user,current_user
+import braintree
 
+gateway = braintree.BraintreeGateway(
+    braintree.Configuration(
+        braintree.Environment.Sandbox,
+        merchant_id=os.environ.get("BT_MERCHANT_ID"),
+        public_key=os.environ.get("BT_PUBLIC_KEY"),
+        private_key=os.environ.get("BT_PRIVATE_KEY")
+    )
+)
+def generate_client_token():
+    return gateway.client_token.generate()
+
+def transact(options):
+    return gateway.transaction.sale(options)
+
+def find_transaction(id):
+    return gateway.transaction.find(id)
+    
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'instagram_web')
 

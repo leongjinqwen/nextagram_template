@@ -1,0 +1,52 @@
+{% extends "_layout.html" %}
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+{% block title %}
+  New photo
+{% endblock %}
+{% block content %}
+
+<div class="form-row">
+  <div class="col-5">
+    <h2>Upload Photo</h2>
+    <form action="{{url_for('images.upload',id=user.id)}}" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
+      <br />
+      <div class="custom-file my-2">
+        <input type="file" class="custom-file-input" name="user_file" accept="image/*" id="customFile">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+        <span class="custom-file-control form-control-file"></span>
+      </div>
+      <div class="form-check my-1">
+          <input type="checkbox" class="form-check-input" name="gallery">
+          <label class="form-check-label" for="gallery">Set this photo as profile photo</label>
+      </div>
+      <button type="submit" class="btn btn-outline-primary mt-2">Upload</button>
+    </form>
+  </div>
+  <div class="col-7 text-center">
+    <img id="image" width="500" />
+  </div>
+</div>
+
+<script>
+document.getElementById("customFile").onchange = function () {
+  let reader = new FileReader();
+
+  reader.onload = function (e) {
+      // get loaded data and render thumbnail.
+      document.getElementById("image").src = e.target.result;
+  };
+
+  // read the image file as a data URL.
+  reader.readAsDataURL(this.files[0]);
+};
+$('.custom-file-input').on('change', function() { 
+  let fileName = $(this).val().split('\\').pop(); 
+  $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+});
+</script>
+{% endblock %}

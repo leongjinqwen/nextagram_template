@@ -7,7 +7,7 @@ from app import app
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
-                            template_folder='templates/sessions')
+                            template_folder='templates/')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -18,7 +18,7 @@ def new():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     else:
-        return render_template('login.html')
+        return render_template('sessions/new.html')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -33,15 +33,15 @@ def login():
         result = check_password_hash(hashed_password, password_to_check)
         if result :
             login_user(user)
-            flash("Successfully logged in.")
+            flash("Successfully logged in.",'primary')
             return redirect(url_for('index'))
         else:
-            error = "Please fill in valid username and password."
-            return render_template('login.html',error=error)
+            flash("Please fill in valid username and password.",'danger')
+            return render_template('sessions/new.html')
     
 @sessions_blueprint.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash("Successfully logged out.")
+    flash("Successfully logged out.",'primary')
     return redirect(url_for('index'))
