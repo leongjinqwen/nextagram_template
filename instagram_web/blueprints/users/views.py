@@ -32,7 +32,7 @@ def create():
 def show(username):
     user = User.get_or_none(User.username == username)
     if user:
-        images = Image.select().where(Image.user==user.id)
+        images = Image.select().where(Image.user==user.id).order_by(Image.created_at.desc())
         ttl = len(images)
         return render_template('users/show.html',user=user,images=images,ttl=ttl)
     return render_template('404.html'), 404

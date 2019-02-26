@@ -4,10 +4,11 @@ from flask import render_template
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
 import sendgrid
+from instagram_web.util.google_oauth import oauth
 
 sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
 
-
+oauth.init_app(app)
 assets = Environment(app)
 assets.register(bundles)
 

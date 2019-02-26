@@ -10,10 +10,12 @@
     <header>
       <h1>Hi, <strong>{{current_user.username}}</strong><br>Your generosity is much appreciated.</h1>
       <p>
-        You are making a donation to  <strong style="font-size:24px">{{user.username}}</strong> .
+        You are making a donation to  <strong style="font-size:24px">{{user.username}}'s {{image.name}}</strong> .
       </p>
+      <img src="{{image.image_url}}" alt="{{image.name}}" width="200">
+      
     </header>
-
+    <br />
     <form id="payment-form" method="post" action="{{url_for('checkouts.create_checkout',id=image.id)}}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
       <section>

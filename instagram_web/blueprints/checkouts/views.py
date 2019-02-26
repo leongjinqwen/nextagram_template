@@ -5,9 +5,7 @@ from models.user import User
 from models.image import Image
 from models.donation import Donation
 from instagram_web.util.mail_helper import send_pay_email
-from flask_login import current_user
-# from money.money import Money
-# from money.currency import Currency
+from flask_login import current_user,login_required
 from decimal import *
 
 checkouts_blueprint = Blueprint('checkouts',
@@ -24,11 +22,12 @@ TRANSACTION_SUCCESS_STATUSES = [
     braintree.Transaction.Status.SubmittedForSettlement
 ]
 
-@checkouts_blueprint.route('/', methods=['GET'])
-def index():
-    return redirect(url_for('checkouts.new_checkout'))
+# @checkouts_blueprint.route('/', methods=['GET'])
+# def index():
+#     return redirect(url_for('checkouts.new_checkout'))
 
 @checkouts_blueprint.route('/<int:id>/new', methods=['GET'])
+@login_required
 def new_checkout(id):
     image = Image.get_by_id(id)
     user = User.get_by_id(image.user)
@@ -36,6 +35,7 @@ def new_checkout(id):
     return render_template('checkouts/new.html',image=image,user=user, client_token=client_token)
 
 @checkouts_blueprint.route('/<int:id>/payment', methods=['POST'])
+@login_required
 def create_checkout(id):
     amt = float(request.form['amount'])
     result = transact({
@@ -59,6 +59,7 @@ def create_checkout(id):
         return redirect(url_for('users.show'))
 
 @checkouts_blueprint.route('/<transaction_id>', methods=['GET'])
+@login_required
 def show_checkout(transaction_id):
     transaction = find_transaction(transaction_id)
     result = {}

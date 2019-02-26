@@ -92,4 +92,3 @@ def update(id):
         flash('Successfully remove photo from profile picture album.','primary')
         return redirect(url_for('users.show',username=current_user.username))
     
-#the arrangement will change due to updated_at,shud use 
