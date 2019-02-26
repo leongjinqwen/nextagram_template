@@ -7,7 +7,7 @@ from app import app
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
-                            template_folder='templates/')
+                            template_folder='templates')
 
 login_manager = LoginManager()
 login_manager.init_app(app)

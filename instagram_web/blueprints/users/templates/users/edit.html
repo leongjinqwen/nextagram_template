@@ -26,18 +26,22 @@
         </div>
         <div class="form-group">
             <label for="bio">Bio:</label>
-            <input type='textarea' required name='bio' class="form-control" / >
+            <input type='textarea' required name='bio' value="{{user.bio}}" class="form-control" / >
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
             <input type='password' required name='password' class="form-control" / >
         </div>
         <div class="form-check my-1">
-            <input type="checkbox" class="form-check-input" name="gallery">
-            <label class="form-check-label" for="gallery">Private Account</label>
+            {% if user.private == True %}
+            <input type="checkbox" class="form-check-input" name="private" checked>
+            {% else %}
+            <input type="checkbox" class="form-check-input" name="private">
+            {% endif %}
+            <label class="form-check-label" for="private">Private Account</label>
             <small class="text-muted pl-2">When your account is private only people you approve can see your photos on Nextagram.Your existing followers won't be affected.</small>
         </div>
-        <button type="submit" class="btn bg-white btn-outline-primary mt-2">Update</button>
+        <button type="submit" class="btn btn-outline-primary mt-2">Update</button>
     </form>
 
 {% endblock %}

@@ -1,17 +1,21 @@
 import os
 from app import app
 from flask import render_template
-from instagram_web.blueprints.users.views import users_blueprint
-from instagram_web.blueprints.images.views import images_blueprint
-from instagram_web.blueprints.sessions.views import sessions_blueprint
-from instagram_web.blueprints.checkouts.views import checkouts_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
+import sendgrid
+
+sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
 
 
 assets = Environment(app)
 assets.register(bundles)
 
+
+from instagram_web.blueprints.users.views import users_blueprint
+from instagram_web.blueprints.images.views import images_blueprint
+from instagram_web.blueprints.sessions.views import sessions_blueprint
+from instagram_web.blueprints.checkouts.views import checkouts_blueprint
 app.register_blueprint(users_blueprint, url_prefix="/users")
 app.register_blueprint(images_blueprint, url_prefix="/images")
 app.register_blueprint(sessions_blueprint, url_prefix="/sessions")

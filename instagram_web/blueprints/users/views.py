@@ -7,7 +7,7 @@ from models.image import Image
 
 users_blueprint = Blueprint('users',
                             __name__,
-                            template_folder='templates/')
+                            template_folder='templates')
 
 
 @users_blueprint.route('/new', methods=['GET'])
@@ -65,7 +65,15 @@ def update(id):
         user.username = request.form['username']
         user.email = request.form['email']
         user.password = user_password
-        if user.save():
+        user.bio = request.form['bio']
+        if request.form.get('private'):
+            user.private = True
+            user.save()
+            flash("Successfully updated.","primary")
+            return redirect(url_for('users.edit',id=id))
+        if not request.form.get('private'):
+            user.private = False
+            user.save()
             flash("Successfully updated.","primary")
             return redirect(url_for('users.edit',id=id))
         else:

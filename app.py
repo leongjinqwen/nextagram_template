@@ -37,10 +37,12 @@ else:
 def before_request():
     db.connect()
 
-@app.after_request
-def after_request(response):
-    db.close()
-    return response
+@app.teardown_request
+def _db_close(exc):
+    if not db.is_closed():
+        print(db)
+        print(db.close())
+    return exc
 
 @app.route('/')
 def index():

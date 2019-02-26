@@ -1,7 +1,7 @@
 from app import app
 from flask import Blueprint, render_template,request,url_for,redirect,flash
 from flask_login import current_user
-from helpers import s3
+from instagram_web.util.helpers import s3
 from werkzeug.utils import secure_filename
 import datetime
 from models.image import Image
@@ -9,7 +9,7 @@ from models.user import User
 
 images_blueprint = Blueprint('images',
                             __name__,
-                            template_folder='templates/')
+                            template_folder='templates')
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -92,3 +92,4 @@ def update(id):
         flash('Successfully remove photo from profile picture album.','primary')
         return redirect(url_for('users.show',username=current_user.username))
     
+#the arrangement will change due to updated_at,shud use 

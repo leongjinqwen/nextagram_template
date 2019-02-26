@@ -11,6 +11,7 @@ class Image(BaseModel):
     image_path = pw.TextField(unique=True,null=False)
     user = pw.ForeignKeyField(User, backref='images')
     gallery = pw.BooleanField(default=True)
+    
 
     @hybrid_property
     def image_url(self):

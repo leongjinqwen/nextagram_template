@@ -8,19 +8,19 @@
   <div class="checkout container">
 
     <header>
-      <h1>Hi, <br>Your generosity is much appreciated.</h1>
+      <h1>Hi, <strong>{{current_user.username}}</strong><br>Your generosity is much appreciated.</h1>
       <p>
         You are making a donation to  <strong style="font-size:24px">{{user.username}}</strong> .
       </p>
     </header>
 
-    <form id="payment-form" method="post" action="{{url_for('checkouts.create_checkout')}}">
+    <form id="payment-form" method="post" action="{{url_for('checkouts.create_checkout',id=image.id)}}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
       <section>
         <label for="amount">
           <span class="input-label">How much would you like to donate?</span>
           <div class="input-wrapper amount-wrapper">
-            <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="5">
+            <input id="amount" name="amount" type="number" min="1" value='0'required placeholder="Amount" step="0.01">
           </div>
         </label>
 

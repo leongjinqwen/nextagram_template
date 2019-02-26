@@ -11,7 +11,8 @@ class User(UserMixin,BaseModel):
     password = pw.CharField(null=False)
     role = pw.CharField(null=False,default='user')
     profile_pic = pw.TextField(default="13defaultpic.png2019-02-22_115512.565685")
-
+    private = pw.BooleanField(default=False)
+    bio = pw.TextField(default='The NEXT star!')
     
     def validate(self):
         duplicate_username = User.get_or_none(User.username == self.username)
