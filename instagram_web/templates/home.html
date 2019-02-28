@@ -5,5 +5,29 @@
 {% block header %}
 {% endblock %}
 {% block content %}
-<h1>Homepage</h1>
+
+<!-- {% for idol in idols %}
+  <h5>{{idol.idol.username}}</h5>
+  <img src="{{idol.idol.profile_image_url}}" width="200"/>
+  
+
+{% endfor %} -->
+{% for image in images %}
+  {% if image.gallery == True %}
+  <div class="d-flex justify-content-center mb-5">
+    <div class="card" style="width:40rem;">
+      <div class="m-2">
+        <img class="d-inline border rounded-circle" src="{{image.user.profile_image_url}}" width="50"/>
+        <a class="card-link" href="{{url_for('users.show',username=image.user.username)}}">
+          <h5 class="d-inline">{{image.user.username}}</h5>
+        </a>
+        <small class="text-muted float-right">Post on {{image.created_at}}</small>
+      </div>
+      <img class="card-img-bottom" src="{{image.image_url}}" width="200"/>
+      
+    </div>
+  </div>  
+  {% endif %}
+{% endfor %}
+
 {% endblock %}

@@ -5,6 +5,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import UserMixin,LoginManager,login_required,logout_user,login_user,current_user
 from app import app
 from instagram_web.util.google_oauth import oauth
+import os
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
@@ -45,10 +46,10 @@ def login():
 def logout():
     logout_user()
     flash("Successfully logged out.",'primary')
-    return redirect(url_for('index'))
+    return redirect(url_for('sessions.new'))
 
-@sessions_blueprint.route("/google_login",methods=["GET"])
-def google_login():
+@sessions_blueprint.route("/google",methods=["GET"])
+def google():
     redirect_uri = url_for('sessions.authorize', _external=True)
     return oauth.google.authorize_redirect(redirect_uri)
     
@@ -62,7 +63,10 @@ def authorize():
         flash("Successfully logged in.",'primary')
         return redirect(url_for('index'))
     else:
-        flash("Please use a valid email.",'danger')
-        return render_template('sessions/new.html') 
-
-
+        name = oauth.google.get('https://www.googleapis.com/oauth2/v2/userinfo').json()['name']
+        user_password = os.urandom(8)
+        user = User(username=name.lower(),email=email,password=user_password)
+        user.save()
+        login_user(user)
+        flash("Successfully signed up and logged in.","primary")
+        return redirect(url_for('index'))

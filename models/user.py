@@ -28,6 +28,18 @@ class User(UserMixin,BaseModel):
 
     @hybrid_property
     def profile_image_url(self):
-        return app.config['AWS_S3_DOMAIN'] + self.profile_pic
+        if self.profile_pic:
+            return app.config['AWS_S3_DOMAIN'] + self.profile_pic
+        else:
+            return app.config['AWS_S3_DOMAIN'] + "13defaultpic.png2019-02-22_115512.565685"
+
     
-    
+    # @hybrid_property
+    # def get_idols(self):
+    #     # less performance
+    #     idols =[]
+    #     for idol in self.idols:
+    #         idols.append(idol.idol)
+    #     return idols
+
+    #     #better performance
