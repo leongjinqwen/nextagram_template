@@ -1,0 +1,36 @@
+{% extends "_layout.html" %}
+{% block title %}
+  Donation summary
+{% endblock %}
+{% block header %}
+{% endblock %}
+{% block content %}
+
+    <h2>Donation Summary</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Donation id.</th>
+                <th scope="col">Date of donation</th>
+                <th scope="col">Donor's username</th>
+                <th scope="col">Donated photo</th>
+                <th scope="col">Amount(USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donation in donations %}
+            <tr>
+                <th scope="row">{{donation.id}}</th>
+                <td>{{donation.created_at}}</td>
+                <td>{{donation.donor.username}}</td>
+                <td>{{donation.image.name}}</td>
+                <td>{{donation.amount}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>  
+    <div class="mt-5">
+        <h5>Total Donation : <strong>{{ttl[0].total}}</strong> USD</h5>
+    </div>
+
+{% endblock %}

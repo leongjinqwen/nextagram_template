@@ -20,11 +20,6 @@
         font-family: 'Raleway', sans-serif;
         background:#f5f5f5;
       }
-      @include media-breakpoint-between(xs,sm){
-        .btn {
-            @include button-size($input-btn-padding-y-sm, $input-btn-padding-x-sm, $font-size-sm, $line-height-sm, $btn-border-radius-sm);
-        }
-      }
       
     </style>
     {% block css %}{% endblock %}
@@ -32,6 +27,7 @@
   </head>
   <body>
     <div class="container-fluid">
+      <!-- navbar -->
       <nav class="navbar fixed-top shadow-sm p-1 px-5 mb-5 navbar-expand-lg navbar-light bg-light justify-content-between ">
         <a class="navbar-brand" href="/">  
           <img src="/static/images/nextagramlogo.png" width="35" height="33" class="d-inline-block align-top" alt="Nextagram" />Nextagram
@@ -52,8 +48,7 @@
             {% if current_user.is_authenticated %}
               <label class="nav-link mt-1" for="username">Welcome, {{current_user.username}}</label>
               <a class="nav-link" href="{{url_for('users.show_request',id=current_user.id)}}">
-                <!-- can use badge from bootstrap -->
-                <img src="/static/images/notilogo.png" width="32" height="32" class="d-inline-block" alt="notification" />
+                <img src="/static/images/notilogo.png" width="31" height="31" class="d-inline-block" alt="notification" />
               </a>
               <a class="nav-link" href="{{url_for('images.new',id=current_user.id)}}">
                 <img src="/static/images/photo.png" width="33" height="26" class="d-inline-block mt-1" alt="photo" />
@@ -68,7 +63,7 @@
                     <img src="/static/images/setting.png" width="25" height="23" class="d-inline-block" alt="setting"/>Setting
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Nothing</a>
+                  <a class="dropdown-item" href="{{url_for('checkouts.summary',id=current_user.id)}}">Donation summary</a>
                 </div>
               </li>
               <a class="nav-link mt-1" href="{{url_for('sessions.logout')}}">Logout</a>
@@ -81,6 +76,7 @@
         </div>  
       </nav>
       <div class="mt-5 pt-3">
+        <!-- flash message -->
         {% with messages = get_flashed_messages(with_categories=True) %}
           {% if messages %}
             <ul class="flashes mt-1" style="list-style: none">
@@ -92,7 +88,7 @@
             </ul>
           {% endif %}
         {% endwith %}
-        <div class="container-fluid mt-2 p-2">
+        <div class="container container-fluid mt-2 p-2">
           {% block content %}
           {% endblock %}
         </div>

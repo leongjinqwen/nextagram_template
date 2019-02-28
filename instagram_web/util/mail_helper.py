@@ -2,8 +2,11 @@ from instagram_web import sg
 import os
 from sendgrid.helpers.mail import *
 from flask_login import current_user
+from flask import request,flash
+from models.user import User
 
 def send_pay_email(receiver,amount):
+    #when payment is success, send email to inform both donor and receiver
     from_email = Email("leongjinqwen@gmail.com")
     to_email = Email(receiver.email)
     if receiver==current_user :
@@ -23,4 +26,15 @@ def send_pay_email(receiver,amount):
         print(response.body)
         print(response.headers)
 
-    #when payment is success, send email to inform both donor and receiver
+def reset_password_email(user,user_password):
+    from_email = Email("leongjinqwen@gmail.com")
+    to_email = Email(user.email)
+    subject = "Reset your password"
+    content = Content("text/html", f"<h1>Dear {user.username},</h1><br/>Here is your temporary password {user_password}. Remember to update it after login to your account.<br/><h1>NEXTAGRAM</h1>")
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+    
+        

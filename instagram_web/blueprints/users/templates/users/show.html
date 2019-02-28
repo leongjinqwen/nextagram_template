@@ -13,7 +13,7 @@
 
 <div class="row">
   <div class="col-4 text-right">
-    <img src="{{user.profile_image_url}}" width="200" height="200" class="img-thumbnail border rounded-circle" />
+    <img src="{{user.profile_image_url}}" width="230" height="230" class="img-thumbnail border rounded-circle" />
   </div>
   <div class="col-4">
     <div style="height:75%">
@@ -26,31 +26,34 @@
       <h5><strong>{{ttlidols}}</strong> following</h5>
     </div>
   </div>
-  {%if current_user.username == user.username %}
-    <div></div>
-  {% else %}
   <div class="col-4">
-    {% if current_user.is_authenticated %}
-      {% if followed %}
-        <!-- if user already followed by current user,button shud show "unfollow" instead of "follow"-->
-        <form action="{{url_for('users.unfollow',id=user.id)}}" method="POST">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / > 
-          <input type="submit" class="btn btn-outline-primary float-right" value="Unfollow"/>
-        </form>        
-      {% else %}
-        <form action="{{url_for('users.follow',id=user.id)}}" method="POST">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / > 
-          <input type="submit" class="btn btn-outline-primary float-right" value="Follow"/>
-        </form>
+  {%if current_user.username == user.username %}
+  <!-- delete button appear when edit button is press     -->
+    <button class="btn btn-outline-primary float-right" id="editProfile" >Edit Profile</button> 
+  {% else %}
+    <div>
+      {% if current_user.is_authenticated %}
+        {% if followed %}
+          <!-- if user already followed by current user,button shud show "unfollow" instead of "follow"-->
+          <form action="{{url_for('users.unfollow',id=user.id)}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / > 
+            <input type="submit" class="btn btn-outline-primary float-right" value="Unfollow"/>
+          </form>        
+        {% else %}
+          <form action="{{url_for('users.follow',id=user.id)}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / > 
+            <input type="submit" class="btn btn-outline-primary float-right" value="Follow"/>
+          </form>
+        {% endif %}
       {% endif %}
-    {% endif %}
-  </div>
+    </div>
   {% endif %}
+  </div>
 </div>
 <div class="panel-heading mt-3">
   <ul id="tab" class="nav nav-tabs justify-content-center" style="font-size:18px" role="tablist">
     <li><a class="nav-link active" href="#photo" role="tab" data-toggle="tab">photos</a></li>
-    <li><a class="nav-link" href="#profile_image" role="tab" data-toggle="tab">profile picture</a></li>
+    <li><a class="nav-link" href="#profile_image" role="tab" data-toggle="tab">profile photo</a></li>
     <li><a class="nav-link" href="#follower" role="tab" data-toggle="tab">followers</a></li>
     <li><a class="nav-link" href="#following" role="tab" data-toggle="tab">following</a></li>
   </ul>
@@ -66,13 +69,13 @@
               <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
               <div class="card-img-overlay d-flex align-items-end justify-content-between">
                 {% if current_user.username == user.username %}
-                <form action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
+                <form class="editForm" style="display:none;" action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="btn btn-outline-danger mt-2" value="Delete"/>
+                  <input type="submit" class="btn btn-outline-light mt-2" value="Delete"/>
                 </form>
-                <form action="{{url_for('images.update',id=image.id)}}" method="POST">          
+                <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" method="POST">          
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="d-inline-block btn btn-outline-primary mt-2" value="Set as profile image"/>
+                  <input type="submit" class="d-inline-block btn btn-outline-light mt-2" value="Set as profile image"/>
                 </form>
                 {% else %}
                 <!-- donate button -->
@@ -92,9 +95,9 @@
               <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
               <div class="card-img-overlay d-flex align-items-end justify-content-between">
                 {% if current_user.username == user.username %}
-                <form action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
+                <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="btn btn-outline-danger mt-2" value="Remove"/>
+                  <input type="submit" class="btn btn-outline-light mt-2" value="Remove"/>
                 </form>
                 {% else %}
                 <!-- donate button -->
@@ -148,13 +151,13 @@
             <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
             <div class="card-img-overlay d-flex align-items-end justify-content-between">
               {% if current_user.username == user.username %}
-              <form action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
+              <form class="editForm" style="display:none;" action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                <input type="submit" class="btn btn-outline-danger mt-2" value="Delete"/>
+                <input type="submit" class="btn btn-outline-light mt-2" value="Delete"/>
               </form>
-              <form action="{{url_for('images.update',id=image.id)}}" method="POST">          
+              <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" method="POST">          
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                <input type="submit" class="d-inline-block btn btn-outline-primary mt-2" value="Set as profile image"/>
+                <input type="submit" class="d-inline-block btn btn-outline-light mt-2" value="Set as profile image"/>
               </form>
               {% else %}
               <!-- donate button -->
@@ -174,9 +177,9 @@
             <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
             <div class="card-img-overlay d-flex align-items-end justify-content-between">
               {% if current_user.username == user.username %}
-              <form action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
+              <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                <input type="submit" class="btn btn-outline-danger mt-2" value="Remove"/>
+                <input type="submit" class="btn btn-outline-light mt-2" value="Remove"/>
               </form>
               {% else %}
               <!-- donate button -->
@@ -217,5 +220,11 @@
     </div>
   {% endif %}
 </div>
+<script>
+  $("#editProfile").click(function(e) {
+    $(".editForm").show();
 
+    e.preventDefault();
+  });
+</script>
 {% endblock %}

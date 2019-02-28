@@ -1,17 +1,11 @@
 {% extends "_layout.html" %}
 {% block title %}
-  Homepage
+  Home
 {% endblock %}
 {% block header %}
 {% endblock %}
 {% block content %}
 
-<!-- {% for idol in idols %}
-  <h5>{{idol.idol.username}}</h5>
-  <img src="{{idol.idol.profile_image_url}}" width="200"/>
-  
-
-{% endfor %} -->
 {% for image in images %}
   {% if image.gallery == True %}
   <div class="d-flex justify-content-center mb-5">
@@ -21,10 +15,9 @@
         <a class="card-link" href="{{url_for('users.show',username=image.user.username)}}">
           <h5 class="d-inline">{{image.user.username}}</h5>
         </a>
-        <small class="text-muted float-right">Post on {{image.created_at}}</small>
+        <small class="text-muted float-right">Posted on {{image.created_at}}</small>
       </div>
       <img class="card-img-bottom" src="{{image.image_url}}" width="200"/>
-      
     </div>
   </div>  
   {% endif %}

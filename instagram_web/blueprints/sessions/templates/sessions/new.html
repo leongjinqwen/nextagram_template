@@ -14,11 +14,43 @@
     <div class="form-group">
         <label for="password">Password:</label>
         <input type='password' required name='password' class="form-control" / >
-        <small class="text-muted">* Forget your password?</small>
+
+        <a href="#" data-toggle="modal" data-target="#forgetpw">
+            <small class="text-muted">* Forget your password?</small>
+        </a>
     </div>
     <button type="submit" class="btn btn-outline-primary mt-2">Sign In</button>
 </form>
 <a style="text-decoration: none" href="{{'google'}}">
     <img src="/static/images/btn_google_signin_light_normal_web@2x.png" class="mt-3" height="44"/>
 </a>       
+
+    
+<!-- Modal -->
+<div class="modal fade" id="forgetpw" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Reset Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="{{url_for('sessions.reset_password')}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >
+            <div class="modal-body">
+                <div class="form-group pb-0 mb-0">
+                    <label for="email">Email:</label>
+                    <input type='email' required name='emailresetpw' class="form-control" / >
+                    <small>We will send you an email with temporary password. Remember to reset your password after login to your account.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-outline-primary" >Confirm</button>
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

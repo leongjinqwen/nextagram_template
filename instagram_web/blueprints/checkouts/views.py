@@ -7,6 +7,7 @@ from models.donation import Donation
 from instagram_web.util.mail_helper import send_pay_email
 from flask_login import current_user,login_required
 from decimal import *
+from peewee import fn
 
 checkouts_blueprint = Blueprint('checkouts',
                             __name__,
@@ -78,3 +79,12 @@ def show_checkout(transaction_id):
 
     return render_template('checkouts/show.html', transaction=transaction, result=result)
 
+@checkouts_blueprint.route('/summary/<int:id>',methods=['GET'])
+def summary(id):
+    user = User.get_by_id(id)
+    if current_user.id == user.id:
+        images = Image.select().where(Image.user==id)
+        donations = Donation.select().where(Donation.image.in_(images))
+        ttl = Donation.select(fn.SUM(Donation.amount).alias('total')).where(Donation.image.in_(images))
+        return render_template('checkouts/summary.html',donations=donations,ttl=ttl)
+    return render_template('401.html'), 401     

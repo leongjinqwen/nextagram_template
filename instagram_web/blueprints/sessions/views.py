@@ -6,6 +6,7 @@ from flask_login import UserMixin,LoginManager,login_required,logout_user,login_
 from app import app
 from instagram_web.util.google_oauth import oauth
 import os
+from instagram_web.util.mail_helper import reset_password_email
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
@@ -70,3 +71,16 @@ def authorize():
         login_user(user)
         flash("Successfully signed up and logged in.","primary")
         return redirect(url_for('index'))
+
+@sessions_blueprint.route('/reset_password', methods=["POST"])
+def reset_password():
+    user = User.get(User.email==request.form['emailresetpw'])
+    user_password = os.urandom(8)
+    user.password = user_password
+    if user.save():
+        reset_password_email(user,user_password)
+        flash('Email is on the way to your mailbox.','primary')
+        return redirect(url_for('sessions.new'))
+    else:
+        flash('Failed to send email. Please try again later.','danger')
+        return redirect(url_for('sessions.new'))

@@ -43,6 +43,7 @@ def show(username):
     return render_template('404.html'), 404
 
 @users_blueprint.route('/search', methods=["POST"])
+@login_required
 def search():
     username = request.form['search'].lower()
     return redirect(url_for('users.show',username=username))
@@ -134,7 +135,7 @@ def unfollow(id):
 def show_request(id):
     followers = FanIdol.select().where(FanIdol.idol==id ,FanIdol.approved==False)
     idols = FanIdol.select().where(FanIdol.fan==id, FanIdol.approved==False)
-    return render_template('users/follower.html',followers=followers,idols=idols)
+    return render_template('users/notification.html',followers=followers,idols=idols)
 
 @users_blueprint.route('/<int:id>/approved',methods=['POST'])
 def approved(id):

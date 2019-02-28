@@ -69,7 +69,6 @@ def upload(id):
 
 @images_blueprint.route('/<int:id>/delete',methods=["POST"])
 def delete(id):
-# delete button should appear when edit is press
     if Image.delete_by_id(id):
         flash("Photo successfully removed from your profile.",'primary')
         return redirect(url_for('users.show',username=current_user.username))
