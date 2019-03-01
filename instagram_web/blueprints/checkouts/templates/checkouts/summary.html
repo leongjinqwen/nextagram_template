@@ -6,31 +6,51 @@
 {% endblock %}
 {% block content %}
 
-    <h2>Donation Summary</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Donation id.</th>
-                <th scope="col">Date of donation</th>
-                <th scope="col">Donor's username</th>
-                <th scope="col">Donated photo</th>
-                <th scope="col">Amount(USD)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for donation in donations %}
-            <tr>
-                <th scope="row">{{donation.id}}</th>
-                <td>{{donation.created_at}}</td>
-                <td>{{donation.donor.username}}</td>
-                <td>{{donation.image.name}}</td>
-                <td>{{donation.amount}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>  
-    <div class="mt-5">
-        <h5>Total Donation : <strong>{{ttl[0].total}}</strong> USD</h5>
-    </div>
-
+<h2>Donation Summary</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Donation id.</th>
+            <th scope="col">Date of donation</th>
+            <th scope="col">Donor's username</th>
+            <th scope="col">Donated photo</th>
+            <th scope="col">Amount(USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for donation in donations %}
+        <tr>
+            <th scope="row">{{donation.id}}</th>
+            <td>{{donation.created_at}}</td>
+            <td><a href="{{url_for('users.show',username=donation.donor.username)}}">{{donation.donor.username}}</a></td>
+            <td>
+              <a href="#" data-toggle="modal" data-target="#myModal{{donation.image.id}}">{{donation.image.name}}</a>
+              <!-- modal to show image -->
+                <div class="modal fade" id="myModal{{donation.image.id}}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">{{donation.image.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <img src="{{donation.image.image_url}}" alt="{{donation.image.name}}" width="300"/>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+            <td>{{donation.amount}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>  
+<div class="mt-5">
+    <h5>Total Donation : <strong>{{ttl[0].total}}</strong> USD</h5>
+</div>
 {% endblock %}

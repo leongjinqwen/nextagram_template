@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, flash,Blueprint
 import braintree
-from app import app,generate_client_token,find_transaction,gateway,transact
+from app import app,generate_client_token,find_transaction,gateway,transact,q
 from models.user import User
 from models.image import Image
 from models.donation import Donation
@@ -8,6 +8,7 @@ from instagram_web.util.mail_helper import send_pay_email
 from flask_login import current_user,login_required
 from decimal import *
 from peewee import fn
+
 
 checkouts_blueprint = Blueprint('checkouts',
                             __name__,
@@ -22,10 +23,6 @@ TRANSACTION_SUCCESS_STATUSES = [
     braintree.Transaction.Status.Settling,
     braintree.Transaction.Status.SubmittedForSettlement
 ]
-
-# @checkouts_blueprint.route('/', methods=['GET'])
-# def index():
-#     return redirect(url_for('checkouts.new_checkout'))
 
 @checkouts_blueprint.route('/<int:id>/new', methods=['GET'])
 @login_required
@@ -52,8 +49,8 @@ def create_checkout(id):
         user = User.get_by_id(image.user)
         donation = Donation(donor=current_user.id,image=id,amount=result.transaction.amount)
         donation.save()
-        send_pay_email(current_user,result.transaction.amount)
-        send_pay_email(user,result.transaction.amount)
+        q.enqueue_call(func=send_pay_email,args=(current_user,result.transaction.amount,),timeout=5)
+        q.enqueue_call(func=send_pay_email,args=(user,result.transaction.amount,),timeout=5)
         return redirect(url_for('checkouts.show_checkout',transaction_id=result.transaction.id))
     else:
         for x in result.errors.deep_errors: flash('Error: %s: %s' % (x.code, x.message))

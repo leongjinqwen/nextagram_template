@@ -4,7 +4,11 @@ from flask import Flask,render_template,request,url_for,redirect,flash,escape
 from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
 import braintree
+from redis import Redis
+from rq import Queue
 
+redis_conn = Redis()
+q = Queue(connection=redis_conn)
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(

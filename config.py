@@ -14,7 +14,7 @@ class Config(object):
     AWS_S3_DOMAIN = os.environ.get("S3_DOMAIN")
     G_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
     G_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET")
-
+    REDIS_URL = os.environ.get('REDIS_URL')
 
 class ProductionConfig(Config):
     DEBUG = False

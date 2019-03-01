@@ -3,10 +3,12 @@ from models.user import User
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_wtf.csrf import CSRFProtect
 from flask_login import UserMixin,LoginManager,login_required,logout_user,login_user,current_user
-from app import app
+from app import app,q
 from instagram_web.util.google_oauth import oauth
 import os
 from instagram_web.util.mail_helper import reset_password_email
+import string
+from random import *
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
@@ -75,10 +77,13 @@ def authorize():
 @sessions_blueprint.route('/reset_password', methods=["POST"])
 def reset_password():
     user = User.get(User.email==request.form['emailresetpw'])
-    user_password = os.urandom(8)
+    min_char = 8
+    max_char = 12
+    allchar = string.ascii_letters + string.punctuation + string.digits
+    user_password = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
     user.password = user_password
     if user.save():
-        reset_password_email(user,user_password)
+        q.enqueue_call(func=reset_password_email,args=(user,user_password,),timeout=5)
         flash('Email is on the way to your mailbox.','primary')
         return redirect(url_for('sessions.new'))
     else:
