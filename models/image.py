@@ -9,7 +9,7 @@ from app import app
 class Image(BaseModel):
     name = pw.CharField()
     image_path = pw.TextField(unique=True,null=False)
-    user_id = pw.ForeignKeyField(User, backref='images')
+    user = pw.ForeignKeyField(User, backref='images')
     gallery = pw.BooleanField(default=True)
     
 
