@@ -49,19 +49,7 @@ def _db_close(exc):
         print(db.close())
     return exc
 
-from flask_login import current_user
-from models.fanidol import FanIdol
-from models.user import User
-from models.image import Image
-@app.route('/')
-# feed should include my idols post and my own photo
-def index():
-    if current_user.is_authenticated:
-        idols = FanIdol.select(FanIdol.idol).where(FanIdol.fan==current_user.id,FanIdol.approved==True)
-        images =Image.select().where((Image.user.in_(idols)) | (Image.user==current_user.id)).order_by(Image.created_at.desc())
-        return render_template('home.html',images=images)
-    else:
-        return render_template('sessions/new.html')
+
     
 @app.errorhandler(401)
 def unauthorized(e):
