@@ -5,9 +5,9 @@ from models.user import User
 
 
 class Donation(BaseModel):
-    donor = pw.ForeignKeyField(User, backref='donations')
+    donor_id = pw.ForeignKeyField(User, backref='donations')
     amount = pw.DecimalField(decimal_places=2,default=0)
-    image = pw.ForeignKeyField(Image, backref='donations')
+    image_id = pw.ForeignKeyField(Image, backref='donations')
     
     
 
