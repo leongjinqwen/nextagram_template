@@ -35,20 +35,20 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@images_blueprint.route('/<int:id>',methods=["GET"])
-def new(id):
-    user = User.get(User.id==id)
-    return render_template('images/upload.html',user=user)
+# @images_blueprint.route('/<int:id>',methods=["GET"])
+# def new(id):
+#     user = User.get(User.id==id)
+#     return render_template('images/upload.html',user=user)
 
 @images_blueprint.route('/<int:id>/upload',methods=["POST"])
 def upload(id):
     if "user_file" not in request.files:
         flash("No user_file key in request.files",'danger')
-        return redirect(url_for('images.new',id=id))
+        return redirect(url_for('index'))
     file = request.files["user_file"]
     if file.filename == "":
         flash("Please select a file",'danger')
-        return redirect(url_for('images.new',id=id))
+        return redirect(url_for('index'))
     if file and allowed_file(file.filename):
         output = upload_file_to_s3(file, app.config["S3_BUCKET"])
         if request.form.get('gallery'):
@@ -57,15 +57,15 @@ def upload(id):
             if image.save():
                 flash("Your profile photo successfully uploaded.",'primary')
                 User.update(profile_pic =str(output) ).where(User.id==id).execute()
-                return redirect(url_for('images.new',id=id))
+                return redirect(url_for('index'))
             return render_template('home.html')
         else:
             image = Image(name=file.filename ,image_path = str(output),user = current_user.id, gallery=True)
             if image.save():
                 flash("Photo successfully uploaded.",'primary')
-                return redirect(url_for('images.new',id=id))
+                return redirect(url_for('index'))
     else:
-        return render_template('images/upload.html')
+        return render_template('home.html')
 
 @images_blueprint.route('/<int:id>/delete',methods=["POST"])
 def delete(id):

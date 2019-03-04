@@ -39,7 +39,9 @@ def show(username):
         ttlfans = len(user.fans)
         ttlidols = len(user.idols)
         ttl = len(images)
-        return render_template('users/show.html',followed=followed,approved=approved,user=user,images=images,ttl=ttl,ttlfans=ttlfans,ttlidols=ttlidols)
+        followers = FanIdol.select().where(FanIdol.idol==current_user.id ,FanIdol.approved==False)
+        idols = FanIdol.select().where(FanIdol.fan==current_user.id, FanIdol.approved==False)
+        return render_template('users/show.html',followers=followers,idols=idols,followed=followed,approved=approved,user=user,images=images,ttl=ttl,ttlfans=ttlfans,ttlidols=ttlidols)
     return render_template('404.html'), 404
 
 @users_blueprint.route('/search', methods=["POST"])
@@ -120,7 +122,7 @@ def unfollow(id):
             fan = FanIdol.delete().where(FanIdol.fan==current_user.id,FanIdol.idol==idol.id)
             fan.execute()
             flash(f"Successfully cancelled your follow request of {idol.username}.","primary")
-            return redirect(url_for('users.show_request',id=current_user.id))
+            return redirect(url_for('users.show',username=current_user.username))
     elif idol.private == False:
         fan = FanIdol.delete().where(FanIdol.fan==current_user.id,FanIdol.idol==idol.id)
         fan.execute()
@@ -131,19 +133,13 @@ def unfollow(id):
         return redirect(url_for('index'))
 
 
-@users_blueprint.route('/<int:id>/follow_request',methods=['GET'])
-def show_request(id):
-    followers = FanIdol.select().where(FanIdol.idol==id ,FanIdol.approved==False)
-    idols = FanIdol.select().where(FanIdol.fan==id, FanIdol.approved==False)
-    return render_template('users/notification.html',followers=followers,idols=idols)
-
 @users_blueprint.route('/<int:id>/approved',methods=['POST'])
 def approved(id):
     fan = User.get_by_id(id)
     follower = FanIdol.update(approved=True).where(FanIdol.fan==id,FanIdol.idol==current_user.id)
     if follower.execute():
         flash(f'{fan.username} now is your follower.','primary')
-        return redirect(url_for('users.show_request',id=current_user.id))
+        return redirect(url_for('users.show',username=current_user.username))
     else:
         flash(f'Failed to approve request,try again later.','danger')
-        return redirect(url_for('users.show_request',id=current_user.id))
+        return redirect(url_for('users.show',username=current_user.username))

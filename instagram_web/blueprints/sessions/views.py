@@ -48,7 +48,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Successfully logged out.",'primary')
     return redirect(url_for('sessions.new'))
 
 @sessions_blueprint.route("/google",methods=["GET"])
