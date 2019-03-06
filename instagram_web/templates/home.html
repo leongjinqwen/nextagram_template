@@ -47,10 +47,14 @@
                 <img src="{{image.image_url}}" alt="{{image.name}}" width="300"/>
               </div>
               <div class="modal-footer">
+                {% if current_user.id==image.user%}
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                {% else %}
                 <form action="{{url_for('checkouts.new_checkout',id=image.id)}}" method="GET">          
                   <input type="submit" class="btn btn-outline-success" value="Donate"/>
                 </form>
                 <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+                {% endif %}
               </div>
             </div>
           </div>
