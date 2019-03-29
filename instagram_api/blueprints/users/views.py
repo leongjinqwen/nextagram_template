@@ -7,18 +7,20 @@ users_api_blueprint = Blueprint('users_api',
 
 @users_api_blueprint.route('/', methods=['GET'])
 def index():
-   users = User.select()
-   result = []
-   for user in users:
-      each = {
-         'id': user.id,
-         'username': user.username,
-         'profileImage' : user.profile_image_url
-      }
-      result.append(each)
-   return jsonify(result)
+    users = User.select()
+    result = []
+    for user in users:
+        each = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'bio': user.bio,
+            'profileImage' : user.profile_image_url
+        }
+        result.append(each)
+    return jsonify(result)
 
-@users_api_blueprint.route('/', methods=['POST'])
+@users_api_blueprint.route('/new', methods=['POST'])
 def create():
     # get the post data
     post_data = request.get_json()

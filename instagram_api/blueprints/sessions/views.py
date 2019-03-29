@@ -2,7 +2,9 @@ from flask import jsonify, Blueprint, request, make_response
 from models.user import User
 from werkzeug.security import check_password_hash
 
-sessions_api_blueprint = Blueprint('sessions_api', __name__)
+sessions_api_blueprint = Blueprint('sessions_api',
+                             __name__,
+                             template_folder='templates')
 
 @sessions_api_blueprint.route('/login', methods=['POST'])
 def sign_in():
