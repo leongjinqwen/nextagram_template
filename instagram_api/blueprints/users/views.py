@@ -27,7 +27,7 @@ def create():
         new_user = User(
             username=post_data['username'],
             email=post_data['email'].lower(),
-            password=generate_password_hash(post_data['password'])
+            password=post_data['password']
         )
 
     except:
