@@ -1,3 +1,6 @@
+# Heroku link
+(https://insta-nextagram.herokuapp.com/)
+
 # Flask Nextagram Template
 
 version 0.0.1 (alpha)
@@ -129,24 +132,5 @@ This template was created against `Python 3.7`. Should work with newer versions 
 This template also comes packaged with Bootstrap 4.1.3 and it's dependencies (jQuery).
 
 A copy of requirements.txt is included in the repository.
-
-```
-autopep8==1.4.3
-certifi==2018.11.29
-Click==7.0
-colorama==0.4.1
-Flask==1.0.2
-Flask-Cors==3.0.7
-itsdangerous==1.1.0
-Jinja2==2.10
-MarkupSafe==1.1.0
-peewee==3.8.2
-peewee-db-evolve==3.7.0
-psycopg2-binary==2.7.7
-pycodestyle==2.5.0
-python-dotenv==0.10.1
-six==1.12.0
-Werkzeug==0.14.1
-```
 
 Remove `certifi==2018.11.29` if you're having trouble installing dependencies.
