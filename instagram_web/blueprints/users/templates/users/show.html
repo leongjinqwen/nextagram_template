@@ -71,53 +71,55 @@
     <!-- check whether current user is approved follower of this user  -->
     {% if current_user.id == user.id or approved %}
       <div class="tab-content clearfix">
-        <div role="tabpanel" class="tab-pane active card-columns" id="photo">
-          {% for image in images %}
-            {% if image.gallery == True %}
-            <div class="card">
-              <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
-              <div class="card-img-overlay d-flex align-items-end justify-content-between">
-                {% if current_user.username == user.username %}
-                <form class="editForm" style="display:none;" action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="btn btn-outline-light mt-2" value="Delete"/>
-                </form>
-                <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" method="POST">          
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="d-inline-block btn btn-outline-light mt-2" value="Set as profile image"/>
-                </form>
-                {% else %}
-                <!-- donate button -->
-                <form action="{{url_for('checkouts.new_checkout',id=image.id)}}" method="GET">          
-                  <input type="submit" class="btn btn-outline-success mt-2" value="Donate"/>
-                </form>
-                {% endif %}
+        <div role="tabpanel" class="tab-pane active" id="photo">
+          <div class='card-columns'>
+            {% for image in images %}
+              <div class="card">
+                <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
+                <div class="card-img-overlay d-flex align-items-end justify-content-between">
+                  {% if current_user.username == user.username %}
+                  <form class="editForm" style="display:none;" action="{{url_for('images.delete',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to delete?')" method="POST">          
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />            
+                    <input type="submit" class="btn btn-outline-light mt-2" value="Delete"/>
+                  </form>
+                  <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" method="POST">          
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />            
+                    <input type="submit" class="d-inline-block btn btn-outline-light mt-2" value="Set as profile image"/>
+                  </form>
+                  {% else %}
+                  <!-- donate button -->
+                  <form action="{{url_for('checkouts.new_checkout',id=image.id)}}" method="GET">          
+                    <input type="submit" class="btn btn-outline-success mt-2" value="Donate"/>
+                  </form>
+                  {% endif %}
+                </div>
               </div>
-            </div>
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <a class="btn btn-outline-primary w-100" href="{{url_for('images.index')}}">See all photos</a>
         </div> 
-        <div role="tabpanel" class="tab-pane fade card-columns" id="profile_image">
-          {% for image in images %}
-            {% if image.gallery == False %}
-            <div class="card">
-              <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
-              <div class="card-img-overlay d-flex align-items-end justify-content-between">
-                {% if current_user.username == user.username %}
-                <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
-                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" / >            
-                  <input type="submit" class="btn btn-outline-light mt-2" value="Remove"/>
-                </form>
-                {% else %}
-                <!-- donate button -->
-                <form action="{{url_for('checkouts.new_checkout',id=image.id)}}" method="GET">          
-                  <input type="submit" class="btn btn-outline-success mt-2" value="Donate"/>
-                </form>
-                {% endif %}
+        <div role="tabpanel" class="tab-pane fade" id="profile_image">
+          <div class='card-columns'>
+            {% for image in profile_images %}
+              <div class="card">
+                <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
+                <div class="card-img-overlay d-flex align-items-end justify-content-between">
+                  {% if current_user.username == user.username %}
+                  <form class="editForm" style="display:none;" action="{{url_for('images.update',id=image.id)}}" onsubmit="return confirm('Are you sure you wish to remove this phot from album?')" method="POST">          
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />            
+                    <input type="submit" class="btn btn-outline-light mt-2" value="Remove"/>
+                  </form>
+                  {% else %}
+                  <!-- donate button -->
+                  <form action="{{url_for('checkouts.new_checkout',id=image.id)}}" method="GET">          
+                    <input type="submit" class="btn btn-outline-success mt-2" value="Donate"/>
+                  </form>
+                  {% endif %}
+                </div>
               </div>
-            </div>
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <a class="btn btn-outline-primary w-100 mb-10" href="{{url_for('images.index')}}">See all photos</a>
         </div>
         <div role="tabpanel" class="tab-pane fade card-columns" id="fan">
           <!-- show all followers of this user -->

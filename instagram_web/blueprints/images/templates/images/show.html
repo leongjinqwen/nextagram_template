@@ -1,0 +1,66 @@
+{% extends "_layout.html" %}
+{% block css %}
+<style>
+    
+</style>
+{% endblock%}
+{% block title %}
+  Images
+{% endblock %}
+{% block content %}
+<div>
+    {% for image in pagination.get_object_list() %}
+        <div class="d-flex justify-content-center mb-5">
+            <div class="card" style="width:40rem;">
+                <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}">
+            </div>
+        </div>
+    {% endfor %}
+    <div class='mb-5'>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <!-- get_page() and page = current page -->
+                {% if page != 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="./?page={{ page - 1 }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if page-5 > 1 %}
+                    <li class="page-item"><a class="page-link" href="./?page={{page - 5 }}">...</a></li>
+                {% endif %}
+                <!-- use get_page_count to find total page -->
+                {% for page_num in range(page-5,page) %}
+                    {% if page_num > 0 %}
+                        {% if page == page_num %}
+                            <li class="page-item"><a class="page-link" style="background-color:#bae7ff">{{page_num}}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="./?page={{page_num}}">{{page_num}}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% for page_num in range(page,page+5) %}
+                    {% if page_num < pagination.get_page_count()+1 %}
+                        {% if page == page_num %}
+                            <li class="page-item"><a class="page-link" style="background-color:#bae7ff">{{page_num}}</a></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="./?page={{page_num}}">{{page_num}}</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if page+5 < pagination.get_page_count() %}
+                    <li class="page-item"><a class="page-link" href="./?page={{page + 5}}">...</a></li>
+                {% endif %}
+                {% if page != pagination.get_page_count() %}
+                    <li class="page-item">
+                        <a class="page-link" href="./?page={{ page + 1 }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

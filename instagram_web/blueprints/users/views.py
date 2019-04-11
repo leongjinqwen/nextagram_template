@@ -35,13 +35,15 @@ def show(username):
     if user:
         followed = FanIdol.get_or_none(FanIdol.fan==current_user.id,FanIdol.idol==user.id)
         approved = FanIdol.get_or_none(FanIdol.fan==current_user.id,FanIdol.idol==user.id,FanIdol.approved==True)
-        images = Image.select().where(Image.user==user.id).order_by(Image.created_at.desc())
+        images = Image.select().where(Image.user==user.id,Image.gallery==True).order_by(Image.created_at.desc()).limit(6)
+        profile_images = Image.select().where(Image.user==user.id,Image.gallery==False).order_by(Image.created_at.desc()).limit(6)        
+        ttl_images = Image.select().where(Image.user==user.id)      
         ttlfans = len(user.fans)
         ttlidols = len(user.idols)
-        ttl = len(images)
+        ttl = len(ttl_images)
         followers = FanIdol.select().where(FanIdol.idol==current_user.id ,FanIdol.approved==False)
         idols = FanIdol.select().where(FanIdol.fan==current_user.id, FanIdol.approved==False)
-        return render_template('users/show.html',followers=followers,idols=idols,followed=followed,approved=approved,user=user,images=images,ttl=ttl,ttlfans=ttlfans,ttlidols=ttlidols)
+        return render_template('users/show.html',followers=followers,idols=idols,followed=followed,approved=approved,user=user,images=images,profile_images=profile_images,ttl=ttl,ttlfans=ttlfans,ttlidols=ttlidols)
     return render_template('404.html'), 404
 
 @users_blueprint.route('/search', methods=["POST"])

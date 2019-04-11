@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import datetime
 from models.image import Image
 from models.user import User
+from playhouse.flask_utils import object_list
 
 images_blueprint = Blueprint('images',
                             __name__,
@@ -35,10 +36,10 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# @images_blueprint.route('/<int:id>',methods=["GET"])
-# def new(id):
-#     user = User.get(User.id==id)
-#     return render_template('images/upload.html',user=user)
+@images_blueprint.route('/',methods=["GET"])
+def index():
+    images = Image.select().where(Image.user==current_user.id).order_by(Image.created_at.desc())
+    return object_list('images/show.html',query=images,paginate_by=10)
 
 @images_blueprint.route('/<int:id>/upload',methods=["POST"])
 def upload(id):
