@@ -35,16 +35,6 @@ def reset_password_email(user,user_password):
     print(response.body)
     print(response.headers)
     
-        
-def schedule_email(email):
-    from_email = Email("leongjinqwen@gmail.com")
-    to_email = Email("leongjinqwen@gmail.com")
-    subject = "testing schedule email"
-    content = Content("text/html", f"<h1>Dear,</h1><br/>Here is your temporary password <h4></h4>Remember to update it after login to your account.<br/><br/><h1>NEXTAGRAM</h1>")
-    mail = Mail(from_email, subject, to_email, content)
-    response = sg.client.mail.send.post(request_body=mail.get())
-    
 
-schedule_email('leongjinqwen@hotmail.com')
 
 
