@@ -76,7 +76,7 @@ def new():
         print(file.filename)
         output = upload_file_to_s3(file, os.environ.get("S3_BUCKET"))
         image = Image(name=file.filename ,image_path = str(output),user = user.id, gallery=True)
-        image.save():
+        image.save()
         responseObject = {
             'success': 'ok',
             'message': 'Your photo successfully uploaded.'
