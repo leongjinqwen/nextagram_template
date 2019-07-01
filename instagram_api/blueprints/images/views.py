@@ -70,7 +70,7 @@ def new():
     user_id = User.decode_auth_token(auth_token)
     user = User.get_or_none(id=user_id)
     
-    file = request.form.get('image')
+    file = request.form['image']
 
     if user:
         print(file.filename)
