@@ -155,9 +155,9 @@
   {% else %}
     <!-- public account,everyone can access -->
     <div class="tab-content clearfix">
-      <div role="tabpanel" class="tab-pane active card-columns" id="photo">
+      <div role="tabpanel" class="tab-pane active" id="photo">
+        <div class='card-columns'>
         {% for image in images %}
-          {% if image.gallery == True %}
           <div class="card">
             <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
             <div class="card-img-overlay d-flex align-items-end justify-content-between">
@@ -178,12 +178,13 @@
               {% endif %}
             </div>
           </div>
-          {% endif %}
         {% endfor %}
+        </div>
+        <a class="btn btn-outline-primary w-100" href="{{url_for('images.index')}}">See all photos</a>
       </div> 
-      <div role="tabpanel" class="tab-pane fade card-columns" id="profile_image">
-        {% for image in images %}
-          {% if image.gallery == False %}
+      <div role="tabpanel" class="tab-pane fade" id="profile_image">
+        <div class='card-columns'>
+        {% for image in profile_images %}
           <div class="card">
             <img class="card-img-top" src="{{image.image_url}}" alt="{{image.name}}" width="280">
             <div class="card-img-overlay d-flex align-items-end justify-content-between">
@@ -200,8 +201,9 @@
               {% endif %}
             </div>
           </div>
-          {% endif %}
         {% endfor %}
+        </div>
+        <a class="btn btn-outline-primary w-100" href="{{url_for('images.index')}}">See all photos</a>
       </div>
       <div role="tabpanel" class="tab-pane fade card-columns" id="follower">
         <!-- show all followers of this user -->

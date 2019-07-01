@@ -1,9 +1,7 @@
 from app import app
 from flask import Blueprint, render_template,request,url_for,redirect,flash
 from flask_login import current_user
-from instagram_web.util.helpers import s3
-from werkzeug.utils import secure_filename
-import datetime
+from instagram_web.util.helpers import upload_file_to_s3
 from models.image import Image
 from models.user import User
 from playhouse.flask_utils import object_list
@@ -13,24 +11,6 @@ images_blueprint = Blueprint('images',
                             template_folder='templates')
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-
-def upload_file_to_s3(file, bucket_name, acl="public-read"):
-    u_name =secure_filename(str(current_user.id) + str(datetime.datetime.now()) + file.filename)
-    try:
-        s3.upload_fileobj(
-            file,
-            bucket_name,
-            u_name,
-            ExtraArgs={
-                "ACL": acl,
-                "ContentType": file.content_type
-            }
-        )
-    except Exception as e:
-        flash("Something Happened: ", e)
-        return e
-    return u_name
 
 def allowed_file(filename):
     return '.' in filename and \
