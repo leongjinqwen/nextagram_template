@@ -1,4 +1,4 @@
-import os
+from app import app
 from flask import Blueprint,jsonify,request,make_response
 from models.user import User
 from models.image import Image
@@ -76,7 +76,7 @@ def new():
         if file and allowed_file(file.filename):
             print(file)
             print(file.content_type)
-            output = upload_file_to_s3(file,os.environ.get("S3_BUCKET"))
+            output = upload_file_to_s3(file,app.config["S3_BUCKET"])
             print(output)
             image = Image(name=file.filename ,image_path = str(output),user = user.id, gallery=True)
             image.save()
@@ -84,7 +84,7 @@ def new():
                 'success': 'ok',
                 'message': 'Your photo successfully uploaded.'
             }
-            return make_response(jsonify(responseObject)), 201
+            return jsonify(responseObject)
     else:
         responseObject = {
             'status': 'failed',
