@@ -2,7 +2,6 @@ import boto3, botocore
 from config import Config
 from werkzeug.utils import secure_filename
 import datetime
-from flask_login import current_user
 from flask import flash
 
 s3 = boto3.client(
@@ -12,7 +11,7 @@ s3 = boto3.client(
 )
 
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
-    u_name =secure_filename(str(current_user.id) + str(datetime.datetime.now()) + file.filename)
+    u_name =secure_filename(str(datetime.datetime.now()) + file.filename)
     try:
         s3.upload_fileobj(
             file,
