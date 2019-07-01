@@ -31,7 +31,7 @@ def upload(id):
         flash("Please select a file",'danger')
         return redirect(url_for('index'))
     if file and allowed_file(file.filename):
-        output = upload_file_to_s3(file, app.config["S3_BUCKET"])
+        output = upload_file_to_s3(file)
         if request.form.get('gallery'):
             gallery_checked = False
             image = Image(name=file.filename ,image_path = str(output),user = current_user.id, gallery=gallery_checked)

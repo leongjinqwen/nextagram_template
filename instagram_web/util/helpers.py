@@ -1,3 +1,4 @@
+import os
 import boto3, botocore
 from config import Config
 from werkzeug.utils import secure_filename
@@ -10,12 +11,12 @@ s3 = boto3.client(
    aws_secret_access_key=Config.S3_SECRET
 )
 
-def upload_file_to_s3(file, bucket_name, acl="public-read"):
+def upload_file_to_s3(file, acl="public-read"):
     u_name =secure_filename(str(datetime.datetime.now()) + file.filename)
     try:
         s3.upload_fileobj(
             file,
-            bucket_name,
+            os.environ.get("S3_BUCKET"),
             u_name,
             ExtraArgs={
                 "ACL": acl,
