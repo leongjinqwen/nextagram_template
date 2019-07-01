@@ -74,10 +74,7 @@ def new():
 
     if user:
         if file and allowed_file(file.filename):
-            print(file)
-            print(file.content_type)
             output = upload_file_to_s3(file,app.config["S3_BUCKET"])
-            print(output)
             image = Image(name=file.filename ,image_path = str(output),user = user.id, gallery=True)
             image.save()
             responseObject = {
